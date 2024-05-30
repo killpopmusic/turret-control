@@ -1,6 +1,6 @@
-# Autonomous turret 
+# RC Airsoft Sentry Turret 
 
 ## Overview 
-This is the repository containing control scripts for autonomous turret project. 
+This is a repository containing control scripts for an autonomous turret project. 
 
 ## Dependencies
