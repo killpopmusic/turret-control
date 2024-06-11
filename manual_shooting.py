@@ -54,6 +54,14 @@ def set_angle_smooth(pwm, start_angle, end_angle, increment, delay):
         time.sleep(delay)
     pwm.ChangeDutyCycle(0)
 
+def shoot():
+    # Set GPIO pin high (1)
+    GPIO.output(shooting_pin, GPIO.HIGH)
+    time.sleep(0.15)  # Time adjusted for a single shot 
+    # Set GPIO pin low (0)
+    GPIO.output(shooting_pin, GPIO.LOW)
+
+
 def move_yaw():
     # Established parameters for continuous movement
     start_yaw = 10
@@ -82,6 +90,7 @@ def listen_for_stop():
         if user_input == "s":
             stop_continuous_movement.set()
             set_angle(pwm_pitch,servo_pin_pitch,15)
+            shoot()
             print("Shooting command received")
 
 
