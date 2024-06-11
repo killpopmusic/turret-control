@@ -1,6 +1,7 @@
 import time
 import threading
 import RPi.GPIO as GPIO
+import curses
 
 # Movement config
 servo_pin_yaw = 19  # Pin for yaw servo
@@ -80,23 +81,34 @@ def move_yaw():
     except KeyboardInterrupt:
         pass
 
-def listen_for_stop():
+def listen_for_stop(stdscr):
+    stdscr.nodelay(True)
+    stdscr.clear()
+    stdscr.addstr(0, 0, "Press 's' to shoot")
+    stdscr.refresh()
+
     while True:
-        user_input = input("Type 's' to shoot ").strip().lower()
-        if user_input == "s":
+        key = stdscr.getch()
+        if key == ord('s'):
             shooting_event.set()
             set_angle(pwm_pitch, servo_pin_pitch, 12)
-            #shoot()
-            print("Shooting command received")
-            set_angle(pwm_pitch, servo_pin_pitch, 25)
+            shoot()
+            set_angle(pwm_pitch, servo_pin_pitch, 30)
+
+            stdscr.addstr(1, 0, "Shooting command received")
+            stdscr.refresh()
+            time.sleep(1)  # Give some time for the user to see the message
             shooting_event.clear()  # Reset the event to continue yaw movement
+            stdscr.clear()
+            stdscr.addstr(0, 0, "Press 's' to shoot")
+            stdscr.refresh()
 
 # Start the continuous yaw movement in a separate thread
 movement_thread = threading.Thread(target=move_yaw)
 movement_thread.start()
 
-# Listen for user command in the main thread
-listen_for_stop()
+# Listen for user command using curses in the main thread
+curses.wrapper(listen_for_stop)
 
 # Wait for the movement thread to finish
 movement_thread.join()
