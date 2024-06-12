@@ -89,7 +89,7 @@ The turret can work remotely, for that a SSh connection between RPi and host PC 
 
   '''
 
-###Running the main script
+### Running the main script
   ```
   python3 main.py
 
