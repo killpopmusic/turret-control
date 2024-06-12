@@ -1,39 +1,97 @@
 # RC Airsoft Sentry Turret 
 
 ## Overview 
-This is a repository containing control scripts for an autonomous turret project. 
+This is a repository containing control scripts for an autonomous turret project. The first version of the project was meant to run entirely on Raspberry Pi 4b with the camera: PiCamera module 3. Other hardware may be used, though the configuration may vary. \
+The repository contains seperate folders with vision algorithm and algorithms for testing separate functionalities of the turret such as: manual servo movement, continuous auto servo movement, shooting with the gearbox.\
+\
+It is highly recommended to test each functionality before running the main program.
 
-## Dependencies
-
-
-## Raspberry PI setup
-The fisrt version of the project was meant to run entirely on Raspberry Pi 4b. Below presented is the proper connection scheme, which will enable the work of default control scripts.
-
+## OS
++ RPi OS: Raspbian Bullseye or newer
++ Host PC: Ubuntu 22.04 recommended
 
 ## Software setup
-1. Generalnie na początek trzeba wpiąć kamerkę i sprawdzić czy system ją widzi. Dobry check to komenda 'rpicam-still'. Może być potrzeba uruchomienia ręcznego kamery (ale raczej nie): 
+### Step 1: Connect and Verify the Camera
 
-**sudo raspi-config -> interfacing options -> yes**.
+1. **Connect the Camera**
+   - Attach the camera to your Raspberry Pi using the appropriate interface.
 
-2. Potrzebna jest biblioteka **libcamera**, która powinna być z automatu zainstalowana na Raspbianie. Jeśli nie ma to troche lipa. Druga to **picamera2** - pythonowa wtyczka do c++'owego API do obsługi kamerki. Jak nie ma to:
+2. **Verify Camera Detection**
+   - Ensure the system detects the camera by running the following command:
+     ```sh
+     rpicam-still
+     ```
+   - If the camera is not detected, you may need to manually enable the camera interface:
+     ```sh
+     sudo raspi-config
+     ```
+     - Navigate to `Interfacing Options` and select `Camera`, then choose `Yes` to enable it.
 
-```sudo apt install python3-libcamera``` 
+### Step 2: Install Required Libraries
 
-```sudo apt install python3-picamera2```
+1. **Install libcamera**
+   - The `libcamera` library should be pre-installed on Raspbian. If it is not installed, it may cause issues.
 
-3. Teraz jeszcze zostało do zainstalowania OpenCV. Najlepiej to zrobić w środowisku wirtualnym, żeby sobie czegoś nie zepsuć, także uprzednio instalujemy:
+2. **Install picamera2**
+   - Install the `picamera2` library, a Python wrapper for the C++ API to handle the camera:
+     ```sh
+     sudo apt install python3-libcamera
+     sudo apt install python3-picamera2
+     ```
 
-```pip install virtualenv```
+### Step 3: Install and Configure OpenCV in a Virtual Environment
 
-tworzymy virtual environment:
+1. **Install virtualenv**
+   - Install the `virtualenv` package to create a virtual environment:
+     ```sh
+     pip install virtualenv
+     ```
 
-```virtualenv env --system-site-packages```
+2. **Create a Virtual Environment**
+   - Create a virtual environment to avoid conflicts with system packages:
+     ```sh
+     virtualenv env --system-site-packages
+     ```
 
-Teraz mamy katalog o nazwie env, który bedzie zawierał potrzebne paczki (a w zasadzie jedną w tym przypadku) ale ma też dostęp do kamerki i bibliotek ją obsługujących, które są na zewnątrz.
-Wchodzimy do środka:
+   - This creates a directory named `env` that will contain the necessary packages and has access to the external camera libraries.
 
-```source env/bin/activate```
+3. **Activate the Virtual Environment**
+   - Enter the virtual environment:
+     ```sh
+     source env/bin/activate
+     ```
 
-i robimy instalacje:
+4. **Install OpenCV**
+   - Install the OpenCV package within the virtual environment:
+     ```sh
+     pip install opencv-python-headless
+     ```
 
-```pip install opencv-python-headless```
+## Startup 
+### Connection and testing turret's functions
+The turret can work remotely, for that a SSh connection between RPi and host PC needs to be established:
++Make sure that the SSH is enabled on the Rpi, then setup the connection on RPi to the same network as the host.
++ On host PC terminal:
+  ```
+  ssh username@raspberrypi.local
+  ```
++Activate the virtual environment 
++Clone this repository into desired directory 
++ ```
+  cd turret-control
+  ```
+  ```
+  cd Testing scripts
+  ```
++ Each script can be run using
+  ```
+  python3 name_of_the_script.py
+
+  '''
+
+###Running the main script
+  ```
+  python3 main.py
+
+  '''
+  
