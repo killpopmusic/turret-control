@@ -1,5 +1,8 @@
 # RC Airsoft Sentry Turret 
 
+![turret](https://github.com/user-attachments/assets/af798f44-c01f-4ab2-844c-7c876a00a2ed)
+https://youtu.be/gsLB4rDxuEw
+
 ## Overview 
 This is a repository containing control scripts for an autonomous turret project. The first version of the project was meant to run entirely on Raspberry Pi 4b with the camera: PiCamera module 3. Other hardware may be used, though the configuration may vary. \
 The repository contains seperate folders with vision algorithm and algorithms for testing separate functionalities of the turret such as: manual servo movement, continuous auto servo movement, shooting with the gearbox.\
